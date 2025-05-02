@@ -13,15 +13,15 @@
 	"durable_objects": {
 		"bindings": [
 		{
-			"name": "EXAMPLE_MCP_SERVER",
-			"class_name": "ExampleMcpServer"
+			"name": "LIVE_CODE_TODO_LIST_SERVER",
+			"class_name": "LiveCodeTodoListServer"
 		}
 		]
 	},
 	"migrations": [
 		{
 		"tag": "v1",
-		"new_sqlite_classes": ["ExampleMcpServer"]
+		"new_sqlite_classes": ["LiveCodeTodoListServer"]
 		}
   	],
 	/**

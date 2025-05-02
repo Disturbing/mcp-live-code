@@ -2,15 +2,16 @@ import { Implementation } from '@modelcontextprotocol/sdk/types.js';
 import { McpHonoServerDO } from '@xava-labs/mcp';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { setupServerTools } from './tools';
-import { setupServerResources } from './resources';
 import { setupServerPrompts } from './prompts';
+import { TodoRepository } from './repository';
 
 /**
- * TodoMcpServer extends McpHonoServerDO for CRUD operations on todo items
+ * LiveCodeTodoListServer extends McpHonoServerDO for CRUD operations on todo items
  */
-export class ExampleMcpServer extends McpHonoServerDO {
-  constructor(ctx: DurableObjectState, env: Env) {
-    super(ctx, env);
+export class LiveCodeTodoListServer extends McpHonoServerDO {
+  constructor(state: DurableObjectState, env: Env) {
+    super(state, env);
+ 
   }
 
   /**
@@ -18,7 +19,7 @@ export class ExampleMcpServer extends McpHonoServerDO {
    */
   getImplementation(): Implementation {
     return {
-      name: 'ExampleMcpServer',
+      name: 'Live Code TODO List',
       version: '1.0.0',
     };
   }
@@ -28,11 +29,14 @@ export class ExampleMcpServer extends McpHonoServerDO {
    * Registers CRUD tools for the MCP server
    */
   configureServer(server: McpServer): void {
+       // Initialize repository with state
+       const repository = new TodoRepository(this.ctx);
+       // Initialize database
+       this.ctx.blockConcurrencyWhile(async () => 
+         repository.initializeDatabase()
+       );
     // Create and set up tools and resources with our repository
-    setupServerTools(server);
-    setupServerResources(server);
+    setupServerTools(server, repository);
     setupServerPrompts(server);
   }
-
-  
 } 

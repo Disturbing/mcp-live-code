@@ -1,6 +1,6 @@
-import { ExampleMcpServer } from './server';
-// Export the TodoMcpServer class for Durable Object binding
-export { ExampleMcpServer };
+import { LiveCodeTodoListServer } from './server';
+// Export the LiveCodeTodoListServer class for Durable Object binding
+export { LiveCodeTodoListServer };
 
 // Worker entrypoint for handling incoming requests
 export default {
@@ -8,14 +8,14 @@ export default {
     const url = new URL(request.url);
     const sessionIdStr = url.searchParams.get('sessionId')
     const id = sessionIdStr
-        ? env.EXAMPLE_MCP_SERVER.idFromString(sessionIdStr)
-        : env.EXAMPLE_MCP_SERVER.newUniqueId();
+        ? env.LIVE_CODE_TODO_LIST_SERVER.idFromString(sessionIdStr)
+        : env.LIVE_CODE_TODO_LIST_SERVER.newUniqueId();
 
     console.log(`Fetching sessionId: ${sessionIdStr} with id: ${id}`);
     
     url.searchParams.set('sessionId', id.toString());
 
-    return env.EXAMPLE_MCP_SERVER.get(id).fetch(new Request(
+    return env.LIVE_CODE_TODO_LIST_SERVER.get(id).fetch(new Request(
         url.toString(),
         request
     ));
